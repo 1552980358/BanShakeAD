@@ -11,8 +11,8 @@ android {
         applicationId = "org.chan0821.ban.shake.ad"
         minSdk = 21
         targetSdk = compileSdk
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
