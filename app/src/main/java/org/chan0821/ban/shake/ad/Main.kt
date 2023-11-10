@@ -42,12 +42,25 @@ class Main(
         @JvmStatic
         @BeforeInvocation
         fun before(callback: BeforeHookCallback) {
-            val sensor = callback.args.let { args ->
-                if (args.size < 2) {
-                    return
-                }
-                args[1] as? Sensor ?: return
+            handleMethod(callback = callback)
+        }
+
+        private fun handleMethod(
+            callback: BeforeHookCallback,
+            args: Array<Any> = callback.args,
+        ) {
+            if (args.size >= 2) {
+                checkAndSkip(
+                    callback = callback,
+                    sensor = args[1] as? Sensor ?: return,
+                )
             }
+        }
+
+        private fun checkAndSkip(
+            callback: BeforeHookCallback,
+            sensor: Sensor,
+        ) {
             if (sensor.type in sensorTypes) {
                 /**
                  * [SensorManager.registerListener]
@@ -58,9 +71,15 @@ class Main(
             }
         }
 
-        fun hook(xposedModule: XposedModule) {
+        private val HookerClass: Class<SensorListenerRegisterHooker>
+            get() = SensorListenerRegisterHooker::class.java
+
+        fun hook(
+            xposedModule: XposedModule,
+            hookerClass: Class<SensorListenerRegisterHooker> = HookerClass
+        ) {
             methods.forEach { method ->
-                xposedModule.hook(method, SensorListenerRegisterHooker::class.java)
+                xposedModule.hook(method, hookerClass)
             }
         }
 
