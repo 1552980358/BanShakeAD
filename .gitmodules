@@ -1,0 +1,4 @@
+[submodule "api"]
+	path = api
+	url = https://github.com/libxposed/api
+	branch = master
